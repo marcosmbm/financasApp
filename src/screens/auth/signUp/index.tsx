@@ -1,4 +1,7 @@
-import { Platform } from "react-native";
+import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
+
+import { Alert, Platform } from "react-native";
 
 import { Container } from "../signIn/styles";
 
@@ -10,6 +13,35 @@ import {
 } from "@/components";
 
 export default function SignIn() {
+  const { signUp } = useAuth();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  async function handleLogin() {
+    const nameValue = name.trim();
+    const emailValue = name.trim();
+    const passwordValue = name.trim();
+
+    if (nameValue === "") {
+      Alert.alert("Nome é obrigatório");
+      return;
+    }
+
+    if (emailValue === "") {
+      Alert.alert("Email é obrigatório");
+      return;
+    }
+
+    if (passwordValue === "") {
+      Alert.alert("Senha é obrigatório");
+      return;
+    }
+
+    await signUp(nameValue, emailValue, passwordValue);
+  }
+
   return (
     <Background>
       <KeyboardDismissContainer>
@@ -17,13 +49,30 @@ export default function SignIn() {
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           enabled
         >
-          <Input placeholder="Digite seu nome" keyboardType="default" />
+          <Input
+            placeholder="Digite seu nome"
+            keyboardType="default"
+            value={name}
+            onChangeText={(value) => setName(value)}
+          />
 
-          <Input placeholder="Digite seu email" keyboardType="email-address" />
+          <Input
+            placeholder="Digite seu email"
+            keyboardType="email-address"
+            value={email}
+            onChangeText={(value) => setEmail(value)}
+          />
 
-          <Input placeholder="Digite sua senha" secureTextEntry />
+          <Input
+            placeholder="Digite sua senha"
+            secureTextEntry
+            value={password}
+            onChangeText={(value) => setPassword(value)}
+          />
 
-          <Button variant="primary">Cadastrar</Button>
+          <Button variant="primary" onPress={handleLogin}>
+            Cadastrar
+          </Button>
         </Container>
       </KeyboardDismissContainer>
     </Background>
