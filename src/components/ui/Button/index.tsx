@@ -1,7 +1,10 @@
 import type React from "react";
 import type { TouchableOpacityProps } from "react-native";
 
+import { Loader } from "../Loader";
+
 import styled, { css } from "styled-components/native";
+import { colors } from "@/styles/config";
 
 interface ButtonStylesProps {
   isFlex?: boolean;
@@ -10,6 +13,7 @@ interface ButtonStylesProps {
 
 interface ButtonProps extends ButtonStylesProps, TouchableOpacityProps {
   children: React.ReactNode;
+  isLoading?: boolean;
 }
 
 const ButtonComponent = styled.TouchableOpacity.attrs<ButtonStylesProps>({
@@ -69,10 +73,17 @@ const Text = styled.Text<ButtonStylesProps>`
     `}
 `;
 
-export function Button({ children, variant, ...rest }: ButtonProps) {
+export function Button({
+  children,
+  variant,
+  isLoading = false,
+  ...rest
+}: ButtonProps) {
   return (
-    <ButtonComponent variant={variant} {...rest}>
-      <Text variant={variant}>{children}</Text>
+    <ButtonComponent variant={variant} disabled={isLoading} {...rest}>
+      {isLoading && <Loader size={20} color={colors.white} />}
+
+      {!isLoading && <Text variant={variant}>{children}</Text>}
     </ButtonComponent>
   );
 }

@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 
 import { api, getError } from "@/services/api";
@@ -6,6 +7,7 @@ import { Alert } from "react-native";
 
 interface AuthContextProps {
   signed: boolean;
+  isLoadingAuth: boolean;
   signUp: (name: string, email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
@@ -20,13 +22,18 @@ export const AuthContext = createContext({} as AuthContextProps);
 export default function AuthProvider({ children }: AuthProviderProps) {
   const navigation = useNavigation();
 
+  const [isLoadingAuth, setIsLoadingAuth] = useState(false);
+
   async function signUp(name: string, email: string, password: string) {
     try {
+      setIsLoadingAuth(true);
       await api.post("/users", { name, email, password });
       navigation.goBack();
     } catch (error) {
       const errorMessage = getError(error);
       Alert.alert("Erro", errorMessage);
+    } finally {
+      setIsLoadingAuth(false);
     }
   }
 
@@ -38,6 +45,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
     <AuthContext.Provider
       value={{
         signed: false,
+        isLoadingAuth,
         signUp,
         signIn,
         signOut,

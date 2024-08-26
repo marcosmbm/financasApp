@@ -13,7 +13,7 @@ import {
 } from "@/components";
 
 export default function SignIn() {
-  const { signUp } = useAuth();
+  const { signUp, isLoadingAuth } = useAuth();
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -70,7 +70,11 @@ export default function SignIn() {
             onChangeText={(value) => setPassword(value)}
           />
 
-          <Button variant="primary" onPress={handleLogin}>
+          <Button
+            variant="primary"
+            onPress={handleLogin}
+            isLoading={isLoadingAuth}
+          >
             Cadastrar
           </Button>
         </Container>
