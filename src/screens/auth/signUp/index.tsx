@@ -21,8 +21,8 @@ export default function SignIn() {
 
   async function handleLogin() {
     const nameValue = name.trim();
-    const emailValue = name.trim();
-    const passwordValue = name.trim();
+    const emailValue = email.trim();
+    const passwordValue = password.trim();
 
     if (nameValue === "") {
       Alert.alert("Nome é obrigatório");
