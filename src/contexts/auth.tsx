@@ -19,6 +19,7 @@ interface User {
 interface AuthContextProps {
   signed: boolean;
   isLoadingAuth: boolean;
+  isLoading: boolean;
   user: User | null;
   signUp: (name: string, email: string, password: string) => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
@@ -34,6 +35,7 @@ export const AuthContext = createContext({} as AuthContextProps);
 export default function AuthProvider({ children }: AuthProviderProps) {
   const navigation = useNavigation();
 
+  const [isLoading, setIsLoading] = useState(true);
   const [isLoadingAuth, setIsLoadingAuth] = useState(false);
   const [user, setUser] = useState<User | null>(null);
 
@@ -59,6 +61,8 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       } catch (error) {
         await AsyncStorage.removeItem(KEY_STORAGE);
         setUser(null);
+      } finally {
+        setIsLoading(false);
       }
     }
     loadStorage();
@@ -108,6 +112,7 @@ export default function AuthProvider({ children }: AuthProviderProps) {
       value={{
         signed: !!user,
         isLoadingAuth,
+        isLoading,
         user,
         signUp,
         signIn,
