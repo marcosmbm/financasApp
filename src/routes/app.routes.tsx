@@ -24,7 +24,13 @@ export default function AppRoutes() {
         drawerInactiveTintColor: colors.black,
       }}
     >
-      <Drawer.Screen name="home" component={Home} />
+      <Drawer.Screen
+        name="home"
+        component={Home}
+        options={{
+          title: "Home",
+        }}
+      />
     </Drawer.Navigator>
   );
 }

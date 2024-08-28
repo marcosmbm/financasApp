@@ -1,20 +1,26 @@
-import { useAuth } from "@/hooks/useAuth";
+import { useState } from "react";
+import { useBalance } from "@/hooks";
 
-import { Background, Header } from "@/components";
-import { Container } from "./styles";
-
-import { View, Text, Button } from "react-native";
+import { Background, Header, BalanceItem } from "@/components";
+import { Container, ListBalance } from "./styles";
 
 export default function Home() {
-  const { signOut } = useAuth();
+  const [dateMovements, setDateMovements] = useState(new Date());
+
+  const { listBalance } = useBalance(dateMovements);
 
   return (
     <Background>
       <Header title="Minhas Movimentações" />
-      <Container>
-        <Text>Home</Text>
 
-        <Button title="Sair" onPress={() => signOut()} />
+      <Container>
+        <ListBalance
+          data={listBalance}
+          keyExtractor={(item) => item.tag}
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          renderItem={({ item }) => <BalanceItem data={item} />}
+        />
       </Container>
     </Background>
   );
