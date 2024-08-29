@@ -1,11 +1,17 @@
+import type { DrawerNavigationProp } from "@react-navigation/drawer";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import Home from "@/screens/app/home";
+import New from "@/screens/app/new";
+
 import { colors } from "@/styles/config";
 
 export type AppRoutesParamList = {
   home: undefined;
+  new: undefined;
 };
+
+export type AppNavigationParamList = DrawerNavigationProp<AppRoutesParamList>;
 
 const Drawer = createDrawerNavigator<AppRoutesParamList>();
 
@@ -29,6 +35,14 @@ export default function AppRoutes() {
         component={Home}
         options={{
           title: "Home",
+        }}
+      />
+
+      <Drawer.Screen
+        name="new"
+        component={New}
+        options={{
+          title: "Registrar",
         }}
       />
     </Drawer.Navigator>

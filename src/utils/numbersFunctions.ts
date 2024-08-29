@@ -1,5 +1,5 @@
 export function formattedMoney(num?: number): string {
-  if (!num) return "";
+  if (num === null || num === undefined) return "";
 
   return new Intl.NumberFormat("pt-BR", {
     style: "currency",
