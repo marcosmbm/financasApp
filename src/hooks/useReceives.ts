@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 
 import { format } from "date-fns";
 import { api, getError } from "@/services/api";
-import type { BalanceModel } from "@/models";
+import type { ReceiveModel } from "@/models";
 import { Alert } from "react-native";
 
-export function useBalance(dateMovements: Date, isFocused: boolean) {
-  const [listBalance, setListBalance] = useState<BalanceModel[]>([]);
+export function useReceives(dateMovements: Date, isFocused: boolean) {
+  const [listReceives, setListReceives] = useState<ReceiveModel[]>([]);
 
   useEffect(() => {
     let isActive = isFocused;
@@ -14,13 +14,13 @@ export function useBalance(dateMovements: Date, isFocused: boolean) {
     async function getMovements() {
       try {
         const dateFormatted = format(dateMovements, "dd/MM/yyyy");
-        const balance = await api.get("/balance", {
+        const balance = await api.get("/receives", {
           params: {
             date: dateFormatted,
           },
         });
 
-        setListBalance(balance.data);
+        setListReceives(balance.data);
       } catch (error) {
         const errorMessage = getError(error);
         Alert.alert(errorMessage);
@@ -35,6 +35,6 @@ export function useBalance(dateMovements: Date, isFocused: boolean) {
   }, [dateMovements, isFocused]);
 
   return {
-    listBalance,
+    listReceives,
   };
 }
