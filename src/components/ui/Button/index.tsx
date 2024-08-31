@@ -8,7 +8,7 @@ import { colors } from "@/styles/config";
 
 interface ButtonStylesProps {
   isFlex?: boolean;
-  variant: "primary" | "secondary" | "link";
+  variant: "primary" | "secondary" | "link" | "warning";
 }
 
 interface ButtonProps extends ButtonStylesProps, TouchableOpacityProps {
@@ -51,6 +51,13 @@ const ButtonComponent = styled.TouchableOpacity.attrs<ButtonStylesProps>({
       css`
         background: transparent;
     `}
+
+    ${(props) =>
+      props.variant === "warning" &&
+      css`
+        background: transparent;
+        border: 1px solid ${(props) => props.theme.colors.red};
+    `}
 `;
 
 const Text = styled.Text<ButtonStylesProps>`
@@ -70,6 +77,12 @@ const Text = styled.Text<ButtonStylesProps>`
       css`
         color: ${(props) => props.theme.colors.black};
         font-weight: normal;
+    `}
+
+    ${(props) =>
+      props.variant === "warning" &&
+      css`
+        color: ${(props) => props.theme.colors.red};
     `}
 `;
 

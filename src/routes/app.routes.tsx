@@ -3,12 +3,14 @@ import { createDrawerNavigator } from "@react-navigation/drawer";
 
 import Home from "@/screens/app/home";
 import New from "@/screens/app/new";
+import Profile from "@/screens/app/profile";
 
 import { colors } from "@/styles/config";
 
 export type AppRoutesParamList = {
   home: undefined;
   new: undefined;
+  profile: undefined;
 };
 
 export type AppNavigationParamList = DrawerNavigationProp<AppRoutesParamList>;
@@ -43,6 +45,14 @@ export default function AppRoutes() {
         component={New}
         options={{
           title: "Registrar",
+        }}
+      />
+
+      <Drawer.Screen
+        name="profile"
+        component={Profile}
+        options={{
+          title: "Meu perfil",
         }}
       />
     </Drawer.Navigator>
