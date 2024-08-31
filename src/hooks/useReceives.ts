@@ -34,7 +34,24 @@ export function useReceives(dateMovements: Date, isFocused: boolean) {
     };
   }, [dateMovements, isFocused]);
 
+  async function deleteReceive(item: ReceiveModel) {
+    try {
+      await api.delete("/receives/delete", {
+        params: {
+          item_id: item.id,
+        },
+      });
+
+      return true;
+    } catch (error) {
+      const errorMessage = getError(error);
+      Alert.alert(errorMessage);
+      return false;
+    }
+  }
+
   return {
     listReceives,
+    deleteReceive,
   };
 }

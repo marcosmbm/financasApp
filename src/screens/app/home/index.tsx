@@ -8,12 +8,20 @@ import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors } from "@/styles/config";
 
+import type { ReceiveModel } from "@/models";
+
 export default function Home() {
   const isFocused = useIsFocused();
   const [dateMovements, setDateMovements] = useState(new Date());
 
   const { listBalance } = useBalance(dateMovements, isFocused);
-  const { listReceives } = useReceives(dateMovements, isFocused);
+  const { listReceives, deleteReceive } = useReceives(dateMovements, isFocused);
+
+  async function handleDeleteItem(item: ReceiveModel) {
+    const response = await deleteReceive(item);
+
+    if (response) setDateMovements(new Date());
+  }
 
   return (
     <Background>
@@ -39,7 +47,9 @@ export default function Home() {
         <List
           data={listReceives}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <HistoryItem data={item} />}
+          renderItem={({ item }) => (
+            <HistoryItem data={item} deleteItem={handleDeleteItem} />
+          )}
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20 }}
         />
