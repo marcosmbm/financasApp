@@ -1,10 +1,17 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { useBalance, useReceives } from "@/hooks";
 import { useIsFocused } from "@react-navigation/native";
 
-import { Background, Header, BalanceItem, HistoryItem } from "@/components";
+import {
+  Background,
+  Header,
+  BalanceItem,
+  HistoryItem,
+  CalendarModal,
+} from "@/components";
+import { TouchableOpacity, Modal } from "react-native";
+
 import { Container, ListBalance, Area, Title, List } from "./styles";
-import { TouchableOpacity } from "react-native";
 import { MaterialIcons } from "@expo/vector-icons";
 import { colors } from "@/styles/config";
 
@@ -12,15 +19,26 @@ import type { ReceiveModel } from "@/models";
 
 export default function Home() {
   const isFocused = useIsFocused();
-  const [dateMovements, setDateMovements] = useState(new Date());
 
-  const { listBalance } = useBalance(dateMovements, isFocused);
-  const { listReceives, deleteReceive } = useReceives(dateMovements, isFocused);
+  const [dateMovements, setDateMovements] = useState(new Date());
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const onlyDate = useMemo(() => {
+    const date = new Date(dateMovements);
+    return new Date(date.valueOf() + date.getTimezoneOffset() * 60 * 1000);
+  }, [dateMovements]);
+
+  const { listBalance } = useBalance(onlyDate, isFocused);
+  const { listReceives, deleteReceive } = useReceives(onlyDate, isFocused);
 
   async function handleDeleteItem(item: ReceiveModel) {
     const response = await deleteReceive(item);
 
     if (response) setDateMovements(new Date());
+  }
+
+  function filterDateMovements(dateSelected: Date) {
+    setDateMovements(dateSelected);
   }
 
   return (
@@ -37,7 +55,7 @@ export default function Home() {
         />
 
         <Area>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <MaterialIcons name="event" color={colors.black} size={25} />
           </TouchableOpacity>
 
@@ -53,6 +71,18 @@ export default function Home() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ paddingBottom: 20 }}
         />
+
+        <Modal
+          visible={modalVisible}
+          animationType="fade"
+          transparent
+          statusBarTranslucent
+        >
+          <CalendarModal
+            onClose={() => setModalVisible(false)}
+            handleFilter={filterDateMovements}
+          />
+        </Modal>
       </Container>
     </Background>
   );
